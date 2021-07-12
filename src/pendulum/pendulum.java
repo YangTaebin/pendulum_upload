@@ -91,7 +91,7 @@ public class pendulum extends JFrame {
             ac_y = gravity;
             float sin_seta = (float) Math.round(((x-cent_x)/((float) Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))))*100)/(float) 100.0;
             float cos_seta = (float) Math.round(((y-cent_y)/((float) Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))))*100)/(float) 100.0;
-            ac_y -= gravity * cos_seta * cos_seta;
+            ac_y += gravity * sin_seta * sin_seta;
             ac_x -= gravity * cos_seta * sin_seta;
         }
     }
