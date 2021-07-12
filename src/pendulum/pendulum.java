@@ -6,7 +6,7 @@ import java.awt.*;
 public class pendulum extends JFrame {
     public float m_ela = (float) 1;
     public float gravity = (float) 0.01;
-    Pendulum pen = new Pendulum(1, 550, 500, 500, 500, 10);
+    Pendulum pen = new Pendulum(1, 900, 500, 500, 500, 10);
 
     pendulum() {
         setTitle("Double Pendulum Simulation");
@@ -41,12 +41,12 @@ public class pendulum extends JFrame {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(Color.RED);
-            g.fillOval((int) pen.x-pen.radius, (int) pen.y-pen.radius, 2*pen.radius, 2*pen.radius);
+            g.setColor(Color.BLACK);
+            g.drawLine((int) pen.cent_x, (int) pen.cent_y, (int) pen.x, (int) pen.y);
             g.setColor(Color.BLACK);
             g.fillOval((int) pen.cent_x-5, (int) pen.cent_y-5, 2*5, 2*5);
-            g.setColor(Color.BLACK);
-            g.drawLine((int) pen.cent_x, (int) pen.cent_y, (int) pen.cent_x, (int) pen.cent_y);
+            g.setColor(Color.RED);
+            g.fillOval((int) pen.x-pen.radius, (int) pen.y-pen.radius, 2*pen.radius, 2*pen.radius);
         }
     }
 
@@ -68,8 +68,8 @@ public class pendulum extends JFrame {
         }
 
         void Next_Stat() {
-            float scope = (float) 0.001;
-            for(int i=0; i<1000; i++) {
+            float scope = (float) 0.05;
+            for(int i=0; i<20; i++) {
                 Next_acc();
                 this.x = (float) (this.x + this.vel_x*(scope) + ((this.ac_x / 2))*Math.pow(scope,2));
                 this.y = (float) (this.y + this.vel_y*(scope) + ((this.ac_y / 2))*Math.pow(scope,2));
@@ -89,10 +89,11 @@ public class pendulum extends JFrame {
         void Next_acc() {
             ac_x = 0;
             ac_y = gravity;
-            float sin_seta = (float) Math.round(((x-cent_x)/((float) Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))))*100)/(float) 100.0;
-            float cos_seta = (float) Math.round(((y-cent_y)/((float) Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))))*100)/(float) 100.0;
-            ac_y += gravity * sin_seta * sin_seta;
-            ac_x -= gravity * cos_seta * sin_seta;
+            float sin_seta = ((x-cent_x)/((float) Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))));
+            float cos_seta = ((y-cent_y)/((float) Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))));
+            float cent_acc = (float) ((Math.pow(vel_x,2)+Math.pow(vel_y,2))/(Math.sqrt(Math.pow(x-cent_x, 2)+Math.pow(y-cent_y, 2))));
+            ac_y -= (gravity * cos_seta + cent_acc) * cos_seta;
+            ac_x -= (gravity * cos_seta + cent_acc) * sin_seta;
         }
     }
 }
